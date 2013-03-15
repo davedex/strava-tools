@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+import xmlrunner
 
 
 class DirectionChecks(unittest.TestCase):
@@ -8,9 +9,12 @@ class DirectionChecks(unittest.TestCase):
         '''Tests the direction returned between two coords lying in a NW direction is correct.'''
         self.failUnless(False)
 
+    def testDummy(self):
+        self.failIf(False)
+
 
 def main():
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test-reports.xml'))
 
 if __name__ == "__main__":
     main()
