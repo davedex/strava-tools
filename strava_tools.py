@@ -14,7 +14,7 @@ class DirectionChecks(unittest.TestCase):
 
 
 def main():
-    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test-reports.xml'))
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test_reports'))
 
 if __name__ == "__main__":
     main()
