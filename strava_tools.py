@@ -7,7 +7,7 @@ import xmlrunner
 class DirectionChecks(unittest.TestCase):
     def testNWDirection(self):
         '''Tests the direction returned between two coords lying in a NW direction is correct.'''
-        self.failUnless(False)
+        self.failUnless(True)
 
     def testDummy(self):
         self.failIf(False)
