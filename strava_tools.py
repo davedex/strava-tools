@@ -3,7 +3,10 @@
 import unittest
 import xmlrunner
 from math import atan2, degrees
-from geopy import geocoders
+# from geopy import geocoders
+import json
+import urllib2
+
 
 class CoordError(Exception): pass
 
@@ -16,12 +19,13 @@ def getBearing((start_lat, start_lng), (end_lat, end_lng)):
     return(degrees(atan2(end_lng - start_lng, end_lat - start_lat)))
 
 def getLocation(lat, lng):
-    '''Uses geopy's reverse geocoding to get a location from a point'''
-    g = geocoders.GeoNames()
+    '''Uses google's reverse geocoding functionality to get a location from a point'''
     if not ((-90 <= lat <= 90) and (-180 <= lng <= 180)):
         raise(CoordError)
-    (place, point) = g.reverse((lat, lng))
-    return place
+    url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng) + "&sensor=true"
+    google_response = urllib2.urlopen(url)
+    json_response = json.loads(google_response.read())
+    return json.dumps(json_response['results'][0]['formatted_address']).replace('"', '')
 
 
 class BearingChecks(unittest.TestCase):
@@ -42,7 +46,8 @@ class BearingChecks(unittest.TestCase):
 class ReverseGeocode(unittest.TestCase):
     def testKnownLocation(self):
         '''Tests a known location can be looked up from it's coordinates'''
-        self.failUnless(getLocation(37.41785, -122.12793) == u"3998 Ventura Ct, Palo Alto, US 94306")
+        self.failUnless(getLocation(52.206167, 0.125281) == u"13 Emmanuel Road, Cambridge CB1, UK")
+        self.failUnless(getLocation(37.41785, -122.12793) == u"3951 Ventura Court, Palo Alto, CA 94306, USA")
 
     def testErroneousCoordinates(self):
         '''Tests that impossible coords fail'''
